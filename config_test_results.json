@@ -1,11 +1,13 @@
 {
-  "timestamp": "2025-06-05T11:41:19.538113",
+  "timestamp": "2025-06-05T12:54:43.153890",
   "summary": {
     "enabled_providers": [
       "openai",
       "anthropic",
       "gemini",
-      "ollama"
+      "ollama",
+      "tts_elevenlabs",
+      "service_huggingface"
     ],
     "validation_results": {
       "openai": true,

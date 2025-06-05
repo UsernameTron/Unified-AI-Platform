@@ -1,0 +1,158 @@
+{
+  "model_capabilities": {
+    "sentiment": {
+      "transformers_available": true,
+      "loaded_models": [
+        "emotion",
+        "sentiment"
+      ],
+      "available_emotion_models": [
+        "j-hartmann/emotion-english-distilroberta-base",
+        "SamLowe/roberta-base-go_emotions",
+        "cardiffnlp/twitter-roberta-base-emotion"
+      ],
+      "available_sentiment_models": [
+        "cardiffnlp/twitter-roberta-base-sentiment-latest",
+        "nlptown/bert-base-multilingual-uncased-sentiment"
+      ],
+      "cuda_available": false,
+      "providers_available": [
+        "openai",
+        "anthropic",
+        "gemini",
+        "ollama",
+        "tts_elevenlabs",
+        "service_huggingface"
+      ]
+    },
+    "predictive": {
+      "sklearn_available": true,
+      "conversation_history_size": 0,
+      "intent_categories": [
+        "information_seeking",
+        "task_completion",
+        "creative_assistance",
+        "problem_solving",
+        "casual_conversation",
+        "technical_support",
+        "decision_making",
+        "learning_education",
+        "entertainment",
+        "emotional_support"
+      ],
+      "performance_factors": [
+        "emotional_resonance",
+        "clarity_and_structure",
+        "novelty_and_uniqueness",
+        "practical_value",
+        "social_shareability",
+        "timing_relevance",
+        "target_audience_fit",
+        "visual_appeal"
+      ],
+      "providers_available": [
+        "openai",
+        "anthropic",
+        "gemini",
+        "ollama",
+        "tts_elevenlabs",
+        "service_huggingface"
+      ],
+      "analytics_capabilities": [
+        "intent_prediction",
+        "content_performance",
+        "conversation_flow",
+        "trend_analysis"
+      ]
+    }
+  },
+  "sentiment_analysis": [
+    {
+      "test": 1,
+      "description": "Highly positive with excitement",
+      "expected": "positive",
+      "actual": "positive",
+      "confidence": 0.9906736016273499,
+      "processing_time": 7.118865251541138,
+      "correct": true
+    },
+    {
+      "test": 2,
+      "description": "Anxiety and worry",
+      "expected": "negative",
+      "actual": "negative",
+      "confidence": 0.8202648162841797,
+      "processing_time": 5.6222357749938965,
+      "correct": true
+    },
+    {
+      "test": 3,
+      "description": "Professional/analytical content",
+      "expected": "neutral",
+      "actual": "positive",
+      "confidence": 0.8560892343521118,
+      "processing_time": 4.870365142822266,
+      "correct": false
+    },
+    {
+      "test": 4,
+      "description": "Casual and enthusiastic",
+      "expected": "positive",
+      "actual": "positive",
+      "confidence": 0.9890766143798828,
+      "processing_time": 5.6672399044036865,
+      "correct": true
+    },
+    {
+      "test": 5,
+      "description": "Anger and frustration",
+      "expected": "negative",
+      "actual": "negative",
+      "confidence": 0.9436710476875305,
+      "processing_time": 4.63326096534729,
+      "correct": true
+    }
+  ],
+  "predictive_analytics": [
+    {
+      "test": 1,
+      "description": "Business strategy request",
+      "expected_intent": "task_completion",
+      "actual_intent": "information_seeking",
+      "confidence": 0.75,
+      "processing_time": 0.0017728805541992188,
+      "confidence_level": "medium",
+      "correct": false
+    },
+    {
+      "test": 2,
+      "description": "Educational inquiry",
+      "expected_intent": "learning_education",
+      "actual_intent": "information_seeking",
+      "confidence": 0.5,
+      "processing_time": 0.0005137920379638672,
+      "confidence_level": "medium",
+      "correct": false
+    },
+    {
+      "test": 3,
+      "description": "Emotional support request",
+      "expected_intent": "emotional_support",
+      "actual_intent": "information_seeking",
+      "confidence": 0.5,
+      "processing_time": 0.0003781318664550781,
+      "confidence_level": "medium",
+      "correct": false
+    },
+    {
+      "test": 4,
+      "description": "Casual chat",
+      "expected_intent": "casual_conversation",
+      "actual_intent": "information_seeking",
+      "confidence": 0.5,
+      "processing_time": 0.00042891502380371094,
+      "confidence_level": "medium",
+      "correct": false
+    }
+  ]
+}

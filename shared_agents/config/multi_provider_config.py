@@ -235,7 +235,11 @@ class AIProviderManager:
             'creative': 'gemini',  # Gemini for creative tasks
             'general': 'openai',   # OpenAI for general purpose
             'local': 'ollama',     # Ollama for local/offline use
-            'fast': 'ollama'       # Ollama for quick responses
+            'fast': 'ollama',      # Ollama for quick responses
+            'tts_high_quality': 'elevenlabs',  # ElevenLabs for high-quality TTS
+            'tts_general': 'openai',           # OpenAI for general TTS
+            'voice_high_quality': 'elevenlabs', # ElevenLabs for high-quality voice
+            'voice_general': 'openai'           # OpenAI for general voice
         }
         
         preferred_provider = task_preferences.get(task_type, 'openai')
@@ -245,6 +249,14 @@ class AIProviderManager:
             return preferred_provider
         
         # Fallback to any available provider
+        if task_type.startswith('tts_') or task_type.startswith('voice_'):
+            # TTS fallback chain
+            tts_providers = ['elevenlabs', 'openai']
+            for provider in tts_providers:
+                if self.is_provider_enabled(provider):
+                    return provider
+        
+        # General fallback for text generation
         enabled_providers = [p for p in ['openai', 'anthropic', 'gemini', 'ollama'] 
                            if self.is_provider_enabled(p)]
         
