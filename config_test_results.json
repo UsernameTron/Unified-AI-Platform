@@ -1,0 +1,72 @@
+{
+  "timestamp": "2025-06-05T11:41:19.538113",
+  "summary": {
+    "enabled_providers": [
+      "openai",
+      "anthropic",
+      "gemini",
+      "ollama"
+    ],
+    "validation_results": {
+      "openai": true,
+      "anthropic": true,
+      "gemini": true,
+      "ollama": true
+    },
+    "provider_configs": {
+      "openai": {
+        "model": "gpt-4",
+        "enabled": true
+      },
+      "anthropic": {
+        "model": "claude-3-5-sonnet-20241022",
+        "enabled": true
+      },
+      "gemini": {
+        "model": "gemini-1.5-pro",
+        "enabled": true
+      },
+      "ollama": {
+        "model": "phi3.5",
+        "base_url": "http://localhost:11434",
+        "enabled": true
+      }
+    }
+  },
+  "test_results": {
+    "openai": {
+      "status": "configured",
+      "has_api_key": true,
+      "model": "gpt-4"
+    },
+    "anthropic": {
+      "status": "configured",
+      "has_api_key": true,
+      "model": "claude-3-5-sonnet-20241022"
+    },
+    "gemini": {
+      "status": "configured",
+      "has_api_key": true,
+      "model": "gemini-1.5-pro"
+    },
+    "ollama": {
+      "status": "configured",
+      "base_url": "http://localhost:11434",
+      "model": "phi3.5"
+    }
+  },
+  "validation": {
+    "openai": true,
+    "anthropic": true,
+    "gemini": true,
+    "ollama": true
+  },
+  "task_assignments": {
+    "code": "anthropic",
+    "logic": "anthropic",
+    "content": "gemini",
+    "creative": "gemini",
+    "general": "openai",
+    "local": "ollama"
+  }
+}

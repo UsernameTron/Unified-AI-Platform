@@ -49,18 +49,22 @@ phase1_setup() {
     echo -e "${BLUE}Creating backup at: $BACKUP_DIR${NC}"
     cp -r "$REPO_ROOT" "$BACKUP_DIR"
     
-    # Ensure we're on main/master branch
-    git checkout main 2>/dev/null || git checkout master 2>/dev/null || {
-        echo -e "${RED}Error: Could not switch to main/master branch${NC}"
-        exit 1
-    }
+    # Check current branch and create cleanup branch if needed
+    CURRENT_BRANCH=$(git branch --show-current)
+    echo -e "${BLUE}Current branch: $CURRENT_BRANCH${NC}"
     
-    # Create cleanup branch
-    echo -e "${BLUE}Creating cleanup branch: $CLEANUP_BRANCH${NC}"
-    git checkout -b "$CLEANUP_BRANCH" || {
-        echo -e "${RED}Error: Could not create cleanup branch${NC}"
-        exit 1
-    }
+    if [[ "$CURRENT_BRANCH" != "$CLEANUP_BRANCH" ]]; then
+        echo -e "${BLUE}Creating cleanup branch: $CLEANUP_BRANCH${NC}"
+        git checkout -b "$CLEANUP_BRANCH" 2>/dev/null || {
+            echo -e "${YELLOW}Cleanup branch already exists, switching to it...${NC}"
+            git checkout "$CLEANUP_BRANCH" || {
+                echo -e "${RED}Error: Could not switch to cleanup branch${NC}"
+                exit 1
+            }
+        }
+    else
+        echo -e "${GREEN}Already on cleanup branch: $CLEANUP_BRANCH${NC}"
+    fi
     
     # Verify Level 4-5 components exist
     echo -e "${BLUE}Validating Level 4-5 components...${NC}"
@@ -363,6 +367,88 @@ phase8_cleanup_deps() {
 }
 
 # ==============================================================================
+# Phase 8.5: Setup API Configuration Management
+# ==============================================================================
+
+phase8_5_setup_api_config() {
+    echo -e "\n${YELLOW}Phase 8.5: Setting Up API Configuration Management${NC}"
+    
+    # Create comprehensive .env.example template
+    if [ ! -f ".env.example" ]; then
+        echo -e "${BLUE}Creating .env.example template${NC}"
+        cat > .env.example << 'EOF'
+# ==============================================================================
+# Unified-AI-Platform API Configuration Template
+# Copy to .env and fill in your actual API keys
+# ==============================================================================
+
+# OpenAI Configuration (General Purpose)
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4
+OPENAI_MAX_TOKENS=2048
+
+# Anthropic Claude Configuration (Logic & Code)
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+ANTHROPIC_MODEL=claude-3-5-sonnet-20241022
+ANTHROPIC_MAX_TOKENS=4096
+
+# Google Gemini Configuration (Content Creation)
+GOOGLE_API_KEY=your_google_api_key_here
+GEMINI_MODEL=gemini-1.5-pro
+GEMINI_MAX_TOKENS=2048
+
+# Local AI Configuration
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=phi3.5
+
+# Text-to-Speech Services
+ELEVENLABS_API_KEY=your_elevenlabs_key_here
+AZURE_SPEECH_KEY=your_azure_speech_key_here
+AZURE_SPEECH_REGION=your_azure_region_here
+
+# Vector Database (if using)
+PINECONE_API_KEY=your_pinecone_key_here
+PINECONE_ENVIRONMENT=your_pinecone_env_here
+
+# Additional AI Services
+COHERE_API_KEY=your_cohere_key_here
+HUGGINGFACE_API_KEY=your_huggingface_key_here
+EOF
+    fi
+    
+    # Update .gitignore to protect API keys
+    if [ ! -f ".gitignore" ]; then
+        touch .gitignore
+    fi
+    
+    if ! grep -q "^\.env$" .gitignore; then
+        echo -e "${BLUE}Adding environment files to .gitignore${NC}"
+        cat >> .gitignore << 'EOF'
+
+# Environment variables and API keys
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# API Configuration
+config/api_keys.json
+config/secrets.yaml
+EOF
+    fi
+    
+    # Create actual .env file if it doesn't exist
+    if [ ! -f ".env" ]; then
+        echo -e "${BLUE}Creating .env file from template${NC}"
+        cp .env.example .env
+        echo -e "${YELLOW}Please edit .env file with your actual API keys${NC}"
+    fi
+    
+    echo -e "${GREEN}Phase 8.5 completed - API configuration setup${NC}"
+}
+
+# ==============================================================================
 # Phase 9: Validate API Endpoints and Routes
 # ==============================================================================
 
@@ -491,6 +577,7 @@ main() {
     phase6_validate_components
     phase7_update_imports
     phase8_cleanup_deps
+    phase8_5_setup_api_config
     phase9_validate_api
     phase10_commit_changes
     phase11_final_validation
