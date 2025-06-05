@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-06-05T12:19:13.957538",
+  "results": {
+    "openai": {
+      "success": true,
+      "response": "Test successful",
+      "model": "gpt-4"
+    },
+    "anthropic": {
+      "success": true,
+      "response": "Test successful",
+      "model": "claude-3-5-sonnet-20241022"
+    },
+    "gemini": {
+      "success": true,
+      "response": "Test successful\n",
+      "model": "gemini-1.5-pro"
+    },
+    "ollama": {
+      "success": true,
+      "response": "Test successful, I am fully operational and ready for any task at hand. What do you need assistance with today?",
+      "model": "phi3.5"
+    }
+  },
+  "summary": {
+    "working": 4,
+    "total": 4
+  }
+}

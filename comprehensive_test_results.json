@@ -1,0 +1,74 @@
+{
+  "openai_tests": {
+    "api_key": {
+      "success": false,
+      "error": "{\n  \"error\": \"Not found\",\n  \"message\": \"The requested resource was not found.\"\n}\n"
+    }
+  },
+  "ollama_tests": {
+    "connection": {
+      "success": true,
+      "models": [
+        "phi3.5:latest",
+        "codellama:latest",
+        "llama2:latest",
+        "mistral:latest"
+      ]
+    },
+    "integration": {
+      "success": false,
+      "status_code": 404,
+      "note": "May not be fully integrated yet"
+    }
+  },
+  "api_tests": {
+    "health_check": {
+      "success": true,
+      "data": {
+        "components": {
+          "agent_manager": true,
+          "analytics": true,
+          "search_system": true,
+          "session_manager": true
+        },
+        "openai_api": "connected",
+        "service": "Unified Meld and RAG System",
+        "status": "healthy",
+        "version": "2.0.0"
+      }
+    }
+  },
+  "integration_tests": {
+    "multiple_agents": {
+      "code_analysis": {
+        "success": false,
+        "status_code": 404
+      },
+      "research": {
+        "success": false,
+        "status_code": 404
+      },
+      "ceo": {
+        "success": false,
+        "status_code": 404
+      },
+      "triage": {
+        "success": false,
+        "status_code": 404
+      }
+    }
+  },
+  "performance_metrics": {
+    "health_check": {
+      "avg_time": 0.4215975284576416,
+      "min_time": 0.26851582527160645,
+      "max_time": 0.5716488361358643
+    }
+  },
+  "summary": {
+    "tests_passed": 2,
+    "total_tests": 8,
+    "success_rate": 25.0,
+    "total_time": 2.607851028442383
+  }
+}
