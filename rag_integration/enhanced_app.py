@@ -92,6 +92,17 @@ def create_app(config_name: str | None = None) -> Flask:
         except Exception as e:
             print(f"⚠️  RAG-Agent integration failed: {e}")
             app.code_orchestrator = None
+        
+        # Initialize AI Gatekeeper system
+        try:
+            from integrations.ai_gatekeeper_routes import register_ai_gatekeeper_routes
+            
+            # Register AI Gatekeeper routes
+            register_ai_gatekeeper_routes(app)
+            
+            print("🛡️ AI Gatekeeper system initialized - Support automation ready")
+        except Exception as e:
+            print(f"⚠️  AI Gatekeeper initialization failed: {e}")
             
     except Exception as e:
         print(f"⚠️  Agent system initialization failed: {e}")
