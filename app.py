@@ -30,7 +30,17 @@ def create_app():
         from integrations.ai_gatekeeper_routes import register_ai_gatekeeper_routes
         register_ai_gatekeeper_routes(app)
         
-        print("✅ AI Gatekeeper routes registered successfully")
+        # Initialize monitoring system
+        from monitoring.metrics_system import monitoring_bp, initialize_health_checks
+        app.register_blueprint(monitoring_bp)
+        
+        # Initialize health checks (will be improved when components are available)
+        try:
+            initialize_health_checks(None, None, None)
+        except Exception as health_error:
+            print(f"⚠️  Health checks initialization failed: {health_error}")
+        
+        print("✅ AI Gatekeeper routes and monitoring registered successfully")
         
     except Exception as e:
         print(f"⚠️  AI Gatekeeper initialization failed: {e}")
@@ -48,7 +58,11 @@ def create_app():
                 'solution_generation': '/api/support/generate-solution',
                 'request_status': '/api/support/status/<request_id>',
                 'slack_integration': '/api/support/slack-integration',
-                'health_check': '/api/support/health'
+                'health_check': '/api/support/health',
+                'monitoring_health': '/api/monitoring/health',
+                'monitoring_metrics': '/api/monitoring/metrics',
+                'monitoring_performance': '/api/monitoring/performance',
+                'monitoring_dashboard': '/api/monitoring/dashboard'
             },
             'documentation': 'See README.md for complete API documentation'
         })
@@ -73,7 +87,11 @@ def create_app():
                 '/api/support/generate-solution',
                 '/api/support/status/<request_id>',
                 '/api/support/slack-integration',
-                '/api/support/health'
+                '/api/support/health',
+                '/api/monitoring/health',
+                '/api/monitoring/metrics',
+                '/api/monitoring/performance',
+                '/api/monitoring/dashboard'
             ]
         }), 404
     
@@ -105,6 +123,10 @@ def main():
     print("   • GET  /api/support/status/<request_id>")
     print("   • POST /api/support/slack-integration")
     print("   • GET  /api/support/health")
+    print("   • GET  /api/monitoring/health")
+    print("   • GET  /api/monitoring/metrics")
+    print("   • GET  /api/monitoring/performance") 
+    print("   • GET  /api/monitoring/dashboard")
     print("   • GET  / (API documentation)")
     
     # Run the application

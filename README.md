@@ -48,6 +48,12 @@ AI Gatekeeper System
 - **Rich Message Formatting**: Interactive buttons and formatted responses
 - **Expert Handoff**: Seamless escalation with full context
 
+### Enhanced Monitoring & Analytics
+- **Real-time Metrics**: Request rates, response times, success rates
+- **Health Monitoring**: Component status and system uptime tracking
+- **Performance Analytics**: Confidence calibration and escalation patterns
+- **Prometheus Integration**: Compatible with standard monitoring tools
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -183,6 +189,13 @@ Content-Type: application/json
 - `POST /api/support/feedback` - Submit solution feedback
 - `GET /api/support/health` - System health check
 
+### Monitoring and Analytics Endpoints
+
+- `GET /api/monitoring/health` - Detailed system health with component status
+- `GET /api/monitoring/metrics` - Real-time metrics data (JSON or Prometheus format)
+- `GET /api/monitoring/performance` - Performance summary and statistics
+- `GET /api/monitoring/dashboard` - Combined dashboard data
+
 ## 🧪 Testing
 
 ### Run Full Test Suite
@@ -270,13 +283,25 @@ The system tracks:
 
 ### Access Analytics
 
-Analytics endpoints for monitoring:
+Enhanced monitoring and analytics endpoints:
 ```bash
-# API access to metrics
-curl http://localhost:5000/api/support/active-requests
+# System health with component status
+curl http://localhost:5000/api/monitoring/health
 
-# Health check
-curl http://localhost:5000/api/support/health
+# Real-time metrics (JSON format)
+curl http://localhost:5000/api/monitoring/metrics
+
+# Prometheus format metrics
+curl http://localhost:5000/api/monitoring/metrics?format=prometheus
+
+# Performance summary (last 24 hours)
+curl http://localhost:5000/api/monitoring/performance?hours=24
+
+# Complete dashboard data
+curl http://localhost:5000/api/monitoring/dashboard
+
+# Active support requests
+curl http://localhost:5000/api/support/active-requests
 ```
 
 ## 🔍 Troubleshooting

@@ -6,6 +6,7 @@ Integrates with existing Flask application to provide support workflow endpoints
 import json
 import asyncio
 import traceback
+import time
 from typing import Dict, Any, Optional
 from flask import Blueprint, request, jsonify, current_app
 from datetime import datetime
@@ -17,6 +18,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from core.support_request_processor import SupportRequestProcessor, SupportRequest, SupportRequestStatus
 from knowledge.solution_generator import KnowledgeBaseSolutionGenerator, SolutionType
+from monitoring.metrics_system import metrics_collector, performance_tracker, track_execution
 
 
 # Create Blueprint for AI Gatekeeper routes
@@ -71,6 +73,7 @@ def register_ai_gatekeeper_routes(app):
 
 
 @ai_gatekeeper_bp.route('/evaluate', methods=['POST'])
+@track_execution('support_request_evaluation')
 def evaluate_support_request():
     """
     Main AI Gatekeeper endpoint for evaluating support requests.
@@ -85,6 +88,7 @@ def evaluate_support_request():
         }
     }
     """
+    start_time = time.time()
     try:
         # Validate request
         if not request.is_json:
@@ -112,6 +116,22 @@ def evaluate_support_request():
             )
         finally:
             loop.close()
+        
+        # Track metrics
+        duration = time.time() - start_time
+        is_automated = support_request.resolution_path == "automated_resolution"
+        
+        performance_tracker.track_request(
+            request_type="evaluation",
+            success=True,
+            duration=duration,
+            confidence=support_request.confidence_score,
+            risk=support_request.risk_score
+        )
+        
+        if not is_automated:
+            escalation_reason = support_request.metadata.get('escalation_reason', 'unknown')
+            performance_tracker.track_escalation(escalation_reason)
         
         # Format response based on resolution path
         if support_request.resolution_path == "automated_resolution":
@@ -150,6 +170,14 @@ def evaluate_support_request():
         return jsonify(response), 200
         
     except Exception as e:
+        # Track error metrics
+        duration = time.time() - start_time
+        performance_tracker.track_request(
+            request_type="evaluation",
+            success=False,
+            duration=duration
+        )
+        
         error_details = {
             'error': 'Internal server error',
             'details': str(e),
@@ -163,6 +191,7 @@ def evaluate_support_request():
 
 
 @ai_gatekeeper_bp.route('/generate-solution', methods=['POST'])
+@track_execution('solution_generation')
 def generate_solution():
     """
     Generate a detailed solution for a specific issue.
@@ -177,6 +206,7 @@ def generate_solution():
         "solution_type": "step_by_step|troubleshooting|configuration|documentation"
     }
     """
+    start_time = time.time()
     try:
         if not request.is_json:
             return jsonify({'error': 'Request must be JSON'}), 400
